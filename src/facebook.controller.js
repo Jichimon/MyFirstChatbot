@@ -15,21 +15,20 @@ exports.verifyWebhookConnection = async function (req, res, next) {
 exports.captureEvent = async function (req, res, next) {
 
     //Verificamos si el evento es de una página
-    if (req.body.object != "page") {
-        return;
-    }
-
-    //revisamos cada una de las entradas
-    req.body.entry.forEach(element => {
-        element.messaging.forEach( event => {
-            //si el evento contiene un mensaje,
-            //procesamos el mensaje
-            if (event.message) {
-                processEvent(event);
-            }
+    if (req.body.object == "page") {
+        //revisamos cada una de las entradas
+        req.body.entry.forEach(element => {
+            element.messaging.forEach( event => {
+                //si el evento contiene un mensaje,
+                //procesamos el mensaje
+                if (event.message) {
+                    processEvent(event);
+                }
+            });
         });
-    });
-}
+        res.sendStatus(200);
+    }
+};
 
 
 function processEvent(event) {
@@ -39,7 +38,7 @@ function processEvent(event) {
     if (message.text) {
         respondToMessage(senderID);
     }
-}
+};
 
 
 function respondToMessage(senderID){
@@ -49,11 +48,10 @@ function respondToMessage(senderID){
             "id": senderID
         },
         "message": response
-    }
+    };
 
     send(body);
-}
-
+};
 
 
 function send(body){
@@ -71,9 +69,9 @@ function send(body){
                 console.log("No se pudo enviar el mensaje: " + err);
             }
         });
-}
+};
 
 
 function generateResponse() {
-    return "que pasa perro"
-}
+    return "que pasa perro";
+};
