@@ -17,8 +17,8 @@ exports.captureEvent = async function (req, res, next) {
     //Verificamos si el evento es de una página
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
-        req.body.entry.forEach(element => {
-            element.messaging.forEach( event => {
+        req.body.entry.forEach(function (element) {
+            element.messaging.forEach( function(event) {
                 //si el evento contiene un mensaje,
                 //procesamos el mensaje
                 if (event.message) {
@@ -27,6 +27,8 @@ exports.captureEvent = async function (req, res, next) {
             });
         });
         res.sendStatus(200);
+    } else {
+        console.log("evento no aceptado");
     }
 };
 
@@ -37,20 +39,28 @@ function processEvent(event) {
 
     if (message.text) {
         respondToMessage(senderID);
+    } else {
+        console.log("el evento message no tiene text");
     }
+    
 };
 
 
 function respondToMessage(senderID){
     var response = generateResponse();
-    let body = {
-        "recipient": {
-            "id": senderID
-        },
-        "message": response
-    };
 
-    send(body);
+    if (response){
+        let body = {
+            "recipient": {
+                "id": senderID
+            },
+            "message": response
+        };   
+        send(body);
+
+    } else {
+        console.log("el mensaje de respuesta no se generó");
+    }
 };
 
 
