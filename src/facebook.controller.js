@@ -26,11 +26,9 @@ exports.captureEvent = async function (req, res, next) {
                 }
             });
         });
-        if (messageSended) {
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(401);
-        }
+        var text = "el mensaje se envio: " + messageSended;
+        console.log(text);
+        res.sendStatus(200,text);
     } else {
         console.log("evento no aceptado");
         res.sendStatus(403);
