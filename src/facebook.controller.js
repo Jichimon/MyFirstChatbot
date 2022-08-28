@@ -51,7 +51,10 @@ function processEvent(event) {
 
 
 function respondToMessage(senderID){
-    var response = generateResponse();
+    var text = generateTextResponse();
+    var response = {
+        "text" : text
+    }
 
     if (response){
         let body = {
@@ -89,6 +92,6 @@ function send(request_body){
 };
 
 
-function generateResponse() {
+function generateTextResponse() {
     return "que pasa perro";
 };
