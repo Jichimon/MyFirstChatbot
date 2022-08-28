@@ -1,4 +1,4 @@
-const { request } = require("../app");
+const request = require("request");
 
 exports.verifyWebhookConnection = async function (req, res, next) {
     // verificar el token
@@ -13,7 +13,7 @@ exports.verifyWebhookConnection = async function (req, res, next) {
 };
 
 exports.captureEvent = async function (req, res, next) {
-
+    var messageSended = false;
     //Verificamos si el evento es de una página
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
@@ -22,13 +22,18 @@ exports.captureEvent = async function (req, res, next) {
                 //si el evento contiene un mensaje,
                 //procesamos el mensaje
                 if (event.message) {
-                    processEvent(event);
+                    messageSended = processEvent(event);
                 }
             });
         });
-        res.sendStatus(200);
+        if (messageSended) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(401);
+        }
     } else {
         console.log("evento no aceptado");
+        res.sendStatus(403);
     }
 };
 
@@ -38,9 +43,10 @@ function processEvent(event) {
     var message = event.message;
 
     if (message.text) {
-        respondToMessage(senderID);
+        return respondToMessage(senderID);
     } else {
         console.log("el evento message no tiene text");
+        return false;
     }
     
 };
@@ -56,15 +62,17 @@ function respondToMessage(senderID){
             },
             "message": response
         };   
-        send(body);
+        return send(body);
 
     } else {
         console.log("el mensaje de respuesta no se generó");
+        return false;
     }
 };
 
 
 function send(body){
+    var wasSended = false;
     request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
@@ -73,12 +81,14 @@ function send(body){
             "json": body
         }, 
         (err, res, next) => {
-            if (!err) {
+            if (res.message_id) {
                 console.log('Mensaje enviado!');
+                wasSended = true;
             } else {
-                console.log("No se pudo enviar el mensaje: " + err);
+                console.log("No se envió el mensaje -- " + err);
             }
         });
+    return wasSended;
 };
 
 
