@@ -78,7 +78,7 @@ function send(request_body){
             "json": request_body
         }, 
         (err, res, body) => {
-            if (res.message_id) {
+            if (!err) {
                 console.log('Mensaje enviado!');
                 return true;
             } else {
