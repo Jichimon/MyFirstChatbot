@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 const cors = require('cors');
+var routes = require('./src/routes');
 
 var app = express();
 
@@ -18,11 +19,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-// Ruta de la pagina index
-app.get("/", function (req, res) {
-    res.send("Se ha desplegado de manera exitosa myFirstChatbot :D");
-});
+//------ routes ----------
+app.use('/', routes);
 
 
 module.exports = app;
