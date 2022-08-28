@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 const cors = require('cors');
-var routes = require('./src/routes');
+var routes = require('./src/facebook.routes');
 
 var app = express();
 
