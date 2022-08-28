@@ -72,7 +72,6 @@ function respondToMessage(senderID){
 
 
 function send(body){
-    var wasSended = false;
     request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
@@ -83,12 +82,12 @@ function send(body){
         (err, res, next) => {
             if (res.message_id) {
                 console.log('Mensaje enviado!');
-                wasSended = true;
+                return true;
             } else {
                 console.log("No se envió el mensaje -- " + err);
+                return false;
             }
         });
-    return wasSended;
 };
 
 
