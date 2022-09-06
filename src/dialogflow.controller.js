@@ -1,9 +1,8 @@
-const  { SessionClient } = require('@google-cloud/dialogflow');
+const  { SessionsClient } = require('@google-cloud/dialogflow');
 const serviceAccount = require('../service-account.json');
 
 
 async function SendToBot(senderID, message) {
-    const queryInput = message;
     const sessionId = senderID;
 
     const sessionClient = new SessionsClient( { credentials: serviceAccount } );
