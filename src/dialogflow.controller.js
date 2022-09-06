@@ -25,7 +25,7 @@ async function SendToBot(senderID, message) {
 
     console.log(result);
 
-    var textResponse = result.fulfillmentMessages.text;
+    var textResponse = result.fulfillmentText;
     return textResponse;
 };
 

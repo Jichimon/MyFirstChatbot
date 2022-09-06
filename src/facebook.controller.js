@@ -92,7 +92,7 @@ function send(request_body){
 async function ToBot(senderID, message) {
     try {
         var response = await dialogFlow.SendToBot(senderID, message);
-        return response.text[0];
+        return response;
     } catch (error) {
         console.log(error);
         return null;
@@ -105,7 +105,7 @@ async function generateResponse(senderID, message){
     const botResponse = await ToBot(senderID, message);
     var text = generateTextResponse();
     var response = {
-        "text" : botResponse || text
+        "text" : botResponse
     }
     return response;
 }
