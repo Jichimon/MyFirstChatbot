@@ -1,4 +1,4 @@
-const  { SessionClient } = require('dialogflow');
+const  { SessionClient } = require('@google-cloud/dialogflow');
 const serviceAccount = require('../service-account.json');
 
 
@@ -16,5 +16,6 @@ async function SendToBot(senderID, message) {
 
     var textResponse = result.fulfillmentMessages.text;
     return textResponse;
-}
- 
+};
+
+module.exports = {SendToBot};

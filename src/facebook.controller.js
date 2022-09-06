@@ -90,12 +90,6 @@ function send(request_body){
 };
 
 
-function getBotResponse(senderID, message) {
-    dialogFlow.SendToBot(senderID, message);
-}
-
-
-
 async function generateResponse(senderID, message){
     var botResponse = await dialogFlow.SendToBot(senderID, message);
     var text = generateTextResponse();
