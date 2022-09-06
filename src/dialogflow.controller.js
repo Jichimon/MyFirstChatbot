@@ -6,13 +6,25 @@ async function SendToBot(senderID, message) {
     const queryInput = message;
     const sessionId = senderID;
 
-    const sessionClient = new SessionClient( { credentials: serviceAccount } );
+    const sessionClient = new SessionsClient( { credentials: serviceAccount } );
 
-    const session = sessionClient.sessionPath('topicos-chatbot-lfqe', sessionId);
+    const sessionPath = sessionClient.projectAgentSessionPath('topicos-chatbot-lfqe', sessionId);
 
-    const responses = await sessionClient.detectIntent( {session, queryInput} );
+    const request = {
+        session: sessionPath,
+        queryInput: {
+            text: {
+                text: message,
+                languageCode: 'es',
+            },
+        },
+    };
+
+    const responses = await sessionClient.detectIntent(request);
     
     const result = responses[0].queryResult;
+
+    console.log(result);
 
     var textResponse = result.fulfillmentMessages.text;
     return textResponse;

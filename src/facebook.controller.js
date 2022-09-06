@@ -89,15 +89,27 @@ function send(request_body){
         });
 };
 
+async function ToBot(senderID, message) {
+    try {
+        var response = await dialogFlow.SendToBot(senderID, message);
+        return response.text[0];
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+
 
 async function generateResponse(senderID, message){
-    var botResponse = await dialogFlow.SendToBot(senderID, message);
+    const botResponse = await ToBot(senderID, message);
     var text = generateTextResponse();
     var response = {
-        "text" : botResponse.text[0] || text
+        "text" : botResponse || text
     }
     return response;
 }
+
 
 
 function generateTextResponse() {
