@@ -1,5 +1,5 @@
 var express = require('express');
-var controller = require('./facebook.controller');
+var fbController = require('./facebook.controller');
 const Routes = express.Router();
 
 Routes.get("/", function (req, res) {
@@ -7,8 +7,10 @@ Routes.get("/", function (req, res) {
 });
 
 
-Routes.get("/webhook", controller.verifyWebhookConnection);
-Routes.post("/webhook", controller.captureEvent);
+Routes.get("/webhook", fbController.verifyWebhookConnection);
+Routes.post("/webhook", fbController.captureEvent);
+
+//Routes.post("/dialogflow/webhook", )
 
 
 module.exports = Routes;

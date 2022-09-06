@@ -1,4 +1,5 @@
 const request = require("request");
+const dialogFlow = require('./dialogflow.controller');
 
 exports.verifyWebhookConnection = async function (req, res, next) {
     // verificar el token
@@ -36,12 +37,12 @@ exports.captureEvent = async function (req, res, next) {
 };
 
 
-function processEvent(event) {
+async function processEvent(event) {
     var senderID = event.sender.id;
     var message = event.message;
 
     if (message.text) {
-        return respondToMessage(senderID);
+        return await respondToMessage(senderID, message.text);
     } else {
         console.log("el evento message no tiene text");
         return false;
@@ -50,11 +51,8 @@ function processEvent(event) {
 };
 
 
-function respondToMessage(senderID){
-    var text = generateTextResponse();
-    var response = {
-        "text" : text
-    }
+async function respondToMessage(senderID, message){
+    var response = await generateResponse(senderID, message);
 
     if (response){
         let body = {
@@ -90,6 +88,22 @@ function send(request_body){
             }
         });
 };
+
+
+function getBotResponse(senderID, message) {
+    dialogFlow.SendToBot(senderID, message);
+}
+
+
+
+async function generateResponse(senderID, message){
+    var botResponse = await dialogFlow.SendToBot(senderID, message);
+    var text = generateTextResponse();
+    var response = {
+        "text" : botResponse.text[0] || text
+    }
+    return response;
+}
 
 
 function generateTextResponse() {
