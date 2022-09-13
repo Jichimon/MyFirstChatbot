@@ -27,9 +27,9 @@ async function dialogFlowCX(senderID, message) {
         session: sessionPath,
         queryInput: {
             text: {
-                text: message,
-                languageCode: LANGUAGE_CODE,
+                text: message
             },
+            languageCode: LANGUAGE_CODE
         },
     };
 
