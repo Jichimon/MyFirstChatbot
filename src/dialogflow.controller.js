@@ -3,7 +3,7 @@ const dialogflowCX = require('@google-cloud/dialogflow-cx');
 const serviceAccount = require('../service-account.json');
 
 const PROJECT_ID = serviceAccount.project_id;
-const LOCATION = 'us-central1';
+const LOCATION = 'global';
 const AGENT_ID = 'attention-agent';
 const LANGUAGE_CODE = 'es';
 
