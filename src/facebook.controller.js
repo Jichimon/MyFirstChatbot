@@ -52,8 +52,8 @@ async function processEvent(event) {
 
 
 async function respondToMessage(senderID, message){
-    var response = await generateResponse(senderID, message);
-
+    var response = await dialogFlow.SendToBot(senderID, message);
+    console.log("DialogFlow Response: " + response);
     if (response){
         let body = {
             "recipient": {
@@ -87,31 +87,4 @@ function send(request_body){
                 return false;
             }
         });
-};
-
-async function ToBot(senderID, message) {
-    try {
-        var response = await dialogFlow.SendToBot(senderID, message);
-        return response;
-    } catch (error) {
-        console.log(error);
-        return null;
-    }
-}
-
-
-
-async function generateResponse(senderID, message){
-    const botResponse = await ToBot(senderID, message);
-    var text = generateTextResponse();
-    var response = {
-        "text" : botResponse
-    }
-    return response;
-}
-
-
-
-function generateTextResponse() {
-    return "que pasa perro";
 };
