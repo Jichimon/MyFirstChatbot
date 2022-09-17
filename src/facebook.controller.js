@@ -14,6 +14,7 @@ exports.verifyWebhookConnection = async function (req, res, next) {
 };
 
 exports.captureEvent = async function (req, res, next) {
+    var messageSended;
     //Verificamos si el evento es de una página
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
@@ -28,7 +29,7 @@ exports.captureEvent = async function (req, res, next) {
         });
     }
 
-    res.send("evento ejecutado");
+    res.send(messageSended);
 };
 
 
@@ -37,7 +38,7 @@ function processEvent(event) {
     var message = event.message;
 
     if (message.text) {
-        respondToMessage(senderID, message.text);
+        return respondToMessage(senderID, message.text);
     } else {
         console.log("el evento message no tiene text");
     }
@@ -53,7 +54,9 @@ async function respondToMessage(senderID, message){
             "recipient": {
                 "id": senderID
             },
-            "message": response
+            "message": {
+                "text" : response
+            }
         };   
         return send(body);
 
@@ -77,6 +80,7 @@ function send(request_body){
         (err, res, body) => {
             console.error('error:', err); 
             console.log('statusCode:', res && res.statusCode); 
-            console.log('body:', body); 
+            console.log('body:', body);
+            return body; 
         })
 };
