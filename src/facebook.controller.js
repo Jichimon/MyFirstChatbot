@@ -45,8 +45,8 @@ function processEvent(event) {
 };
 
 
-function respondToMessage(senderID, message){
-    var response = dialogFlow.SendToBot(senderID, message);
+async function respondToMessage(senderID, message){
+    var response = await dialogFlow.SendToBot(senderID, message);
     console.log("DialogFlow Response: " + response);
     if (response){
         let body = {
