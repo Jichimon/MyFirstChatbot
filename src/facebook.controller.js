@@ -51,27 +51,25 @@ async function respondToMessage(senderID, message){
     var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
     console.log("DialogFlow Response: " + dialogFlowResponse.toString());
 
-    dialogFlowResponse.forEach(
-        textResponse => {
-            let body = {
-                "recipient": {
-                    "id": senderID
-                },
-                "message": {
-                    "text" : textResponse.toString()
-                }
-            }; 
+    for (const textResponse of dialogFlowResponse) {
+        let body = {
+            "recipient": {
+                "id": senderID
+            },
+            "message": {
+                "text" : textResponse.toString()
+            }
+        }; 
 
-            send(body);
-        }
-    );
+        await send(body);
+    }
 };
 
 
-function send(request_body){
+async function send(request_body){
 
     console.log("Request body: " + request_body);
-    request(
+    await request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
             "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
