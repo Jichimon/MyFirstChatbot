@@ -18,12 +18,12 @@ exports.captureEvent = async function (req, res, next) {
     //Verificamos si el evento es de una página
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
-        await req.body.entry.forEach(async function (element) {
-            await element.messaging.forEach( async function(event) {
+        req.body.entry.forEach( function (element) {
+            element.messaging.forEach( function(event) {
                 //si el evento contiene un mensaje,
                 //procesamos el mensaje
                 if (event.message) {
-                    messageSended = await processEvent(event);
+                    messageSended = processEvent(event);
                 }
             });
         });
@@ -37,12 +37,12 @@ exports.captureEvent = async function (req, res, next) {
 };
 
 
-async function processEvent(event) {
+function processEvent(event) {
     var senderID = event.sender.id;
     var message = event.message;
 
     if (message.text) {
-        return await respondToMessage(senderID, message.text);
+        return respondToMessage(senderID, message.text);
     } else {
         console.log("el evento message no tiene text");
         return false;
@@ -61,7 +61,7 @@ async function respondToMessage(senderID, message){
             },
             "message": response
         };   
-        return send(body);
+        return await send(body);
 
     } else {
         console.log("el mensaje de respuesta no se generó");
@@ -70,8 +70,8 @@ async function respondToMessage(senderID, message){
 };
 
 
-function send(request_body){
-    request(
+async function send(request_body){
+    await request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
             "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
