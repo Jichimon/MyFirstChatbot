@@ -51,18 +51,17 @@ async function respondToMessage(senderID, message){
     var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
     console.log("DialogFlow Response: " + dialogFlowResponse.toString());
 
-    for (const textResponse of dialogFlowResponse) {
         let body = {
             "recipient": {
                 "id": senderID
             },
             "message": {
-                "text" : textResponse.toString()
+                "text" : dialogFlowResponse.toString()
             }
         }; 
 
         await send(body);
-    }
+
 };
 
 
