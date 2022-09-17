@@ -27,7 +27,7 @@ exports.captureEvent = async function (req, res, next) {
                 }
             });
         });
-        res.send(messageSended.toString());
+        res.send('evento ejecutado!');
     }
 
     res.status(400);
