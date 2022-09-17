@@ -18,12 +18,12 @@ exports.captureEvent = async function (req, res, next) {
     //Verificamos si el evento es de una página
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
-        req.body.entry.forEach(function (element) {
-            element.messaging.forEach( function(event) {
+        await req.body.entry.forEach(async function (element) {
+            await element.messaging.forEach( async function(event) {
                 //si el evento contiene un mensaje,
                 //procesamos el mensaje
                 if (event.message) {
-                    messageSended = processEvent(event);
+                    messageSended = await processEvent(event);
                 }
             });
         });
