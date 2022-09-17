@@ -14,7 +14,6 @@ exports.verifyWebhookConnection = async function (req, res, next) {
 };
 
 exports.captureEvent = async function (req, res, next) {
-    var messageSended = false;
     //Verificamos si el evento es de una página
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
@@ -27,13 +26,9 @@ exports.captureEvent = async function (req, res, next) {
                 }
             });
         });
-        var text = "el mensaje se envio: " + messageSended;
-        console.log(text);
-        res.status(200).send(text);
-    } else {
-        console.log("evento no aceptado");
-        res.status(403).send("evento no aceptado");
     }
+
+    res.send("evento ejecutado");
 };
 
 
@@ -42,17 +37,16 @@ function processEvent(event) {
     var message = event.message;
 
     if (message.text) {
-        return respondToMessage(senderID, message.text);
+        respondToMessage(senderID, message.text);
     } else {
         console.log("el evento message no tiene text");
-        return false;
     }
     
 };
 
 
-async function respondToMessage(senderID, message){
-    var response = await dialogFlow.SendToBot(senderID, message);
+function respondToMessage(senderID, message){
+    var response = dialogFlow.SendToBot(senderID, message);
     console.log("DialogFlow Response: " + response);
     if (response){
         let body = {
@@ -61,7 +55,7 @@ async function respondToMessage(senderID, message){
             },
             "message": response
         };   
-        return await send(body);
+        return send(body);
 
     } else {
         console.log("el mensaje de respuesta no se generó");
@@ -70,8 +64,10 @@ async function respondToMessage(senderID, message){
 };
 
 
-async function send(request_body){
-    await request(
+function send(request_body){
+
+    console.log("Request body: " + request_body);
+    request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
             "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
@@ -79,12 +75,8 @@ async function send(request_body){
             "json": request_body
         }, 
         (err, res, body) => {
-            if (!err) {
-                console.log('Mensaje enviado!');
-                return true;
-            } else {
-                console.log("No se envió el mensaje -- " + err);
-                return false;
-            }
-        });
+            console.error('error:', err); 
+            console.log('statusCode:', res && res.statusCode); 
+            console.log('body:', body); 
+        })
 };
