@@ -1,5 +1,6 @@
 var express = require('express');
 var fbController = require('./facebook.controller');
+var dfTester = require('./tests/dialogflow.test.js');
 const Routes = express.Router();
 
 Routes.get("/", function (req, res) {
@@ -10,7 +11,6 @@ Routes.get("/", function (req, res) {
 Routes.get("/webhook", fbController.verifyWebhookConnection);
 Routes.post("/webhook", fbController.captureEvent);
 
-//Routes.post("/dialogflow/webhook", )
-
+Routes.post("/test/dialogflow", dfTester.TestDialogFlowConnection);
 
 module.exports = Routes;

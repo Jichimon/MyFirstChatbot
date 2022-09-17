@@ -1,5 +1,5 @@
 const request = require("request");
-const dialogFlow = require('./dialogflow.controller');
+const dialogFlow = require('./providers/dialogflow.service');
 
 exports.verifyWebhookConnection = async function (req, res, next) {
     // verificar el token
@@ -9,7 +9,7 @@ exports.verifyWebhookConnection = async function (req, res, next) {
         res.status(200).send(req.query["hub.challenge"]);
     } else {
         console.error("Verificación del token fallida.");
-        res.sendStatus(403);
+        res.status(403).send('Verificacion del token fallida');
     }
 };
 
@@ -29,10 +29,10 @@ exports.captureEvent = async function (req, res, next) {
         });
         var text = "el mensaje se envio: " + messageSended;
         console.log(text);
-        res.sendStatus(200,text);
+        res.status(200).send(text);
     } else {
         console.log("evento no aceptado");
-        res.sendStatus(403);
+        res.status(403).send("evento no aceptado");
     }
 };
 
