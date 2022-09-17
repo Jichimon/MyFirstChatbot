@@ -49,7 +49,7 @@ function processEvent(event) {
 
 async function respondToMessage(senderID, message){
     var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
-    console.log("DialogFlow Response: " + response);
+    console.log("DialogFlow Response: " + dialogFlowResponse.toString());
 
     dialogFlowResponse.forEach(
         textResponse => {
