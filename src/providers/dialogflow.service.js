@@ -35,10 +35,8 @@ async function dialogFlowCX(senderID, message) {
 
     const responses = await sessionClient.detectIntent(request); 
     const result = responses[0].queryResult;
-    var responseMessage = result.responseMessages;
-
-
-    return responseMessage[0].text.text;
+    var responseMessages = result.responseMessages;
+    return loadTextMessages(responseMessages);
 }
 
 async function dialogFlowSE(senderID, message) {
@@ -59,6 +57,16 @@ async function dialogFlowSE(senderID, message) {
     console.log(result);
     var textResponse = result.fulfillmentText;
     return textResponse;
+}
+
+function loadTextMessages(responseMessages) {
+    var textResponses = [];
+    responseMessages.forEach(
+        item => {
+            textResponses.push(item.text.text);
+        }
+    );
+    return textResponses;
 }
 
 module.exports = {SendToBot};

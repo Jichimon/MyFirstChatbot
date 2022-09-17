@@ -48,23 +48,23 @@ function processEvent(event) {
 
 
 async function respondToMessage(senderID, message){
-    var response = await dialogFlow.SendToBot(senderID, message);
+    var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
     console.log("DialogFlow Response: " + response);
-    if (response){
-        let body = {
-            "recipient": {
-                "id": senderID
-            },
-            "message": {
-                "text" : response.toString()
-            }
-        };   
-        return send(body);
 
-    } else {
-        console.log("el mensaje de respuesta no se generó");
-        return false;
-    }
+    dialogFlowResponse.forEach(
+        textResponse => {
+            let body = {
+                "recipient": {
+                    "id": senderID
+                },
+                "message": {
+                    "text" : textResponse
+                }
+            }; 
+
+            send(body);
+        }
+    );
 };
 
 
