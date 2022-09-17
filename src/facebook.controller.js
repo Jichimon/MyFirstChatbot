@@ -58,7 +58,7 @@ async function respondToMessage(senderID, message){
                     "id": senderID
                 },
                 "message": {
-                    "text" : textResponse
+                    "text" : textResponse.toString()
                 }
             }; 
 
