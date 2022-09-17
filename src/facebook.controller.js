@@ -27,9 +27,10 @@ exports.captureEvent = async function (req, res, next) {
                 }
             });
         });
+        res.send(messageSended.toString());
     }
 
-    res.send(messageSended);
+    res.status(400);
 };
 
 
@@ -55,7 +56,7 @@ async function respondToMessage(senderID, message){
                 "id": senderID
             },
             "message": {
-                "text" : response
+                "text" : response.toString()
             }
         };   
         return send(body);
