@@ -65,10 +65,10 @@ async function respondToMessage(senderID, message){
 };
 
 
-async function send(request_body){
+function send(request_body){
 
     console.log("Request body: " + request_body);
-    await request(
+    request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
             "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
