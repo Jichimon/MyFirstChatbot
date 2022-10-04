@@ -3,8 +3,15 @@ var path = require('path');
 var logger = require('morgan');
 const cors = require('cors');
 var routes = require('./src/routes');
+const mongodb = require('./src/providers/mongodb.connection');
 
 var app = express();
+
+//Conectando a MongoDB
+mongodb.Connect();
+//Cargando los seeders
+var seeder = require('./src/seeders/main.seeder');
+seeder.loadSeeds();
 
 //configurando CORS
 app.use( cors({
