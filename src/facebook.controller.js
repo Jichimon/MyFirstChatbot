@@ -49,7 +49,7 @@ function processEvent(event) {
 
 async function respondToMessage(senderID, message){
     var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
-    console.log("DialogFlow Response: " + dialogFlowResponse.toString());
+    console.log("DialogFlow Response: " + dialogFlowResponse.toString() + " ... from: " + senderID);
 
         let body = {
             "recipient": {
@@ -67,7 +67,6 @@ async function respondToMessage(senderID, message){
 
 function send(request_body){
 
-    console.log("Request body: " + request_body);
     request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
