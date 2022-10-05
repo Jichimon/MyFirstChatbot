@@ -31,7 +31,7 @@ async function dialogFlowCX(senderID, message) {
             },
             languageCode: LANGUAGE_CODE
         },
-    };preguntarval
+    }
 
     const responses = await sessionClient.detectIntent(request); 
     const result = responses[0].queryResult;
