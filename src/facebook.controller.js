@@ -25,7 +25,7 @@ exports.captureEvent = async function (req, res, next) {
             element.messaging.forEach( function(event) {
                 //si el evento contiene un mensaje,
                 //procesamos el mensaje
-                if (event.message) {
+                if (event.message != undefined) {
                     messageSended = processEvent(event);
                 }
             });
@@ -35,6 +35,26 @@ exports.captureEvent = async function (req, res, next) {
 
     res.status(400);
 };
+
+
+exports.captureEvent2 = async function (req, res, next) {
+    var messageSended;
+    //Verificamos si el evento es de una página
+    if (req.body.object == "page") {
+        //revisamos cada una de las entradas
+        var entry = req.body.entry;
+        var element = entry.element;
+        var event = element.messaging.event;
+        //si el evento contiene un mensaje,
+        //procesamos el mensaje
+        if (event.message) {
+            messageSended = processEvent(event);
+        }
+        res.send('evento ejecutado!');
+    }
+
+    res.status(400);
+}
 
 
 function processEvent(event) {
@@ -75,7 +95,6 @@ async function handleMessage(senderID, message){
 
 
 async function send(request_body){
-    var response;
     await request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
@@ -90,13 +109,11 @@ async function send(request_body){
             response = body;
         }
     );
-    return response;
 };
 
 
-async function getUserInfo(personID) {
-    var response;
-    await request(
+function getUserInfo(personID) {
+    request(
         {
             "uri": "https://graph.facebook.com/v15.0/" + personID + "/",
             "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
@@ -106,8 +123,7 @@ async function getUserInfo(personID) {
             console.error('error:', err); 
             console.log('statusCode:', res && res.statusCode); 
             console.log('body:', body);
-            response = body;
+            return body;
         }
     );
-    return response;
 }
