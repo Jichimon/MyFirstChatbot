@@ -25,7 +25,7 @@ const inquireModel = new Schema({
 
 inquireModel.methods.toString = () => {
     return 'product: ' + this.product.name + 
-    ' | prospect: ' + this.prospect.name + 
+    ' | prospect: ' + this.prospect.firstName + 
     ' | count: ' + this.count;
 }
 

@@ -1,55 +1,59 @@
 const Prospect = require('./../models/prospect.model');
 const Product = require('./../models/product.model');
+const Assessment = require('./../models/assessment.model');
+const Client = require('./../models/client.model');
 
-exports.saveCommentAboutProduct = async (productName, email, prospectName, comment, points) => {
+exports.saveCommentAboutProduct = async (productName, prospect, comment, points) => {
     
-    if (!productName || !email || !comment || !points) {
+    if (!productName || !prospect || !comment || !points) {
         return "No se han enviado todos los datos requeridos";
     }
     
-    if (!Prospect.ValidateEmail(email)) { return "No se ha enviado una correcta dirección de correo" }
 
     var product = await Product.findByName(productName);
     if (!product) {
         return "El producto no está disponible en el catálogo";
     }
+
+    var prospectFirstName = prospect.first_name;
+    var prospectPersonId = prospect.id;
  
-    var prospect = await Prospect.findByEmail(email);
-    if (!prospect) {
+    var existentProspect = await Prospect.findByPersonId(prospectPersonId);
+    if (!existentProspect) {
         console.log("Prospect doesnt exists yet. Creating prospect.")
-        prospect = await createNewProspect(email, prospectName);
-        if (!prospect)  return "No se pudo crear el prospecto";
+        existentProspect = await createNewProspect(prospect);
+        if (!existentProspect)  return "No se pudo crear el prospecto";
         console.log("Prospect created.");
     }
 
-    var assessment = await prospect.makeAssessment(product, points, comment);
+    var assessment = await existentProspect.makeAssessment(product, points, comment);
     console.log("Assessment Made: " + assessment.toString());
 
-    return "Gracias " + prospectName + "! tu comentario se ha guardado! Eso no ayudará mucho a brindarte un mejor servicio.";
+    return "Gracias " + prospectFirstName + "! tu comentario se ha guardado! Eso no ayudará mucho a brindarte un mejor servicio.";
 };
 
-exports.saveProspect = async (email, name, phone) => {
+exports.saveProspect = async (prospect) => {
     
-    if (!name || !email) { return "No se han enviado todos los datos requeridos" }
-    if (!Prospect.ValidateEmail(email)) { return "No se ha enviado una correcta dirección de correo" }
+    if (!prospect) { return "No se han enviado todos los datos requeridos" }
 
-    var prospect = await Prospect.findByEmail(email);
-    if (prospect) {
-        return "Ya existe un prospecto con este usuario!";
+    var existentProspect = await Prospect.findByPersonId(prospect.id);
+    if (existentProspect) {
+        return "Ya existe un prospecto con este usuario :(";
     }
 
-    var res = await createNewProspect(email, name, phone);
+    var res = await createNewProspect(prospect);
 
-    return res == null ? "Se creó el prospecto!" : "No se creó el prospecto.";
+    return res == null ? "Se creó el prospecto en base de datos para " + prospect.first_name + "!" : "No se creó el prospecto.";
 }
 
 
-createNewProspect = async (email, name, phone) => {
+createNewProspect = async (prospect) => {
     var nuevo = new Prospect({
-        email,
-        name,
-        phone
-    });
+        personId:   prospect.id,
+        firstName:  prospect.first_name,
+        lastName:   prospect.last_name,
+        profilePhoto: prospect.profile_pic
+    }); 
 
     var response = null;
     await nuevo.save().then((o) => { response = o });

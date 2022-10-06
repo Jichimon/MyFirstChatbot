@@ -2,13 +2,31 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 
+const validateEmail = function(email) {
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/;
+    return re.test(email);
+};
+
 const clientModel = new Schema({
     docNumber: {
         type: String,
-        required: [true, 'docNumber is mandatory']
+        unique: true,
+        required: false
     },
     Address: {
         type: String,
+    },
+    email: {
+        type: String,
+        trim: true,
+        required: [true, 'El email es obligatorio'],
+        lowercase: true,
+        unique: true,
+        validate: [validateEmail, 'Por favor, ingrese un email Válido'],
+        match: [/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/]
+    },
+    phone: {
+        type: String
     },
     age: {
         type: Number,
@@ -27,16 +45,18 @@ clientModel.methods.toString = () => {
     ' | count: ' + this.count;
 }
 
-clientModel.statics.add = function (aClient, callback) {
-    this.create(aClient, callback);
+clientModel.statics.add = async function (aClient) {
+    return this.create(aClient).exec();
 }
 
-clientModel.statics.findByProspect = function (aProspect, callback) {
-    this.find({ prospect: aProspect }, callback);
+clientModel.statics.findByProspect = async function (aProspect) {
+    return this.find({ prospect: aProspect }).exec();
 }
 
-clientModel.statics.findByDocNumber = function (aDocNumber, callback) {
-    this.findOne({ docNumber: aDocNumber }, callback);
+clientModel.statics.findByDocNumber = async function (aDocNumber) {
+    return this.findOne({ docNumber: aDocNumber }).exec();
 }
+
+clientModel.statics.ValidateEmail = validateEmail;
 
 module.exports = mongoose.model('Client', clientModel);

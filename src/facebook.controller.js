@@ -1,5 +1,6 @@
 const request = require("request");
 const dialogFlow = require('./providers/dialogflow.service');
+const prospectService = require('./services/prospect.service');
 
 exports.verifyWebhookConnection = async function (req, res, next) {
     // verificar el token
@@ -19,8 +20,8 @@ exports.captureEvent = async function (req, res, next) {
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
         req.body.entry.forEach( function (element) {
-            //console.log("Se recibe un elemento del body ");
-            //console.log(element);
+            console.log("Se recibe un elemento del body ");
+            console.log(element);
             element.messaging.forEach( function(event) {
                 //si el evento contiene un mensaje,
                 //procesamos el mensaje
@@ -54,6 +55,8 @@ async function handleMessage(senderID, message){
 
     var prospect = await getUserInfo(senderID);
     console.log(prospect);
+    var actionResponseMessage = prospectService.saveProspect(prospect);
+    console.log(actionResponseMessage);
 
     var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
     console.log("DialogFlow Response: " + dialogFlowResponse.toString() + " ... from: " + senderID);
