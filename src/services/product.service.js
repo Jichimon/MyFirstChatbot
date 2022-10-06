@@ -14,11 +14,11 @@ exports.getProductInfo = async (productName, prospect) => {
         return "El producto no está disponible en el catálogo";
     }
 
-    var prospect = await Prospect.findByPersonId(prospect.id);
-    if (!prospect) {
+    var dbProspect = await Prospect.findByPersonId(prospect.id);
+    if (!dbProspect) {
         return "El prospecto no existe";
     }
-    await prospect.makeInquire(product);
+    await dbProspect.makeInquire(product);
     
     return product.toString();
 }
