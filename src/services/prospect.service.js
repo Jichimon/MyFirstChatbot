@@ -48,6 +48,8 @@ exports.saveProspect = async (prospect) => {
 
 
 exports.createNewProspect = async (prospect) => {
+    console.log("Se envía a guardar el prospect.. ");
+
     if (!prospect) return null;
 
     var nuevo = new Prospect({
