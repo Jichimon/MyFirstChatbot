@@ -84,7 +84,7 @@ async function handleMessage(senderID, message){
             console.error('error:', err); 
             console.log('statusCode:', res && res.statusCode); 
             console.log('body:', body);
-            var prospect = body;
+            var prospect = JSON.parse(body);
             buildResponse(senderID, message, prospect);
         }
     );
