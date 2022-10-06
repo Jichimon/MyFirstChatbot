@@ -10,7 +10,7 @@ Routes.get("/", function (req, res) {
 
 
 Routes.get("/webhook", fbController.verifyWebhookConnection);
-Routes.post("/webhook", fbController.captureEvent2);
+Routes.post("/webhook", fbController.captureEvent);
 
 Routes.post("/test/dialogflow", dfTester.TestDialogFlowConnection);
 

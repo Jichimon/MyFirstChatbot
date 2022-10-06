@@ -75,9 +75,13 @@ async function handleMessage(senderID, message){
 
     var prospect = await getUserInfo(senderID);
     console.log(prospect);
-    var actionResponseMessage = prospectService.saveProspect(prospect);
-    console.log(actionResponseMessage);
 
+    var existentProspect = await Prospect.findByPersonId(prospect.id);
+    if (!existentProspect) {
+        existentProspect = prospectService.createNewProspect(prospect);
+    }
+    
+ 
     var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
     console.log("DialogFlow Response: " + dialogFlowResponse.toString() + " ... from: " + senderID);
 
