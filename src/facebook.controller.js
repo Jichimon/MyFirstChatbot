@@ -19,6 +19,8 @@ exports.captureEvent = async function (req, res, next) {
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
         req.body.entry.forEach( function (element) {
+            console.log("Se recibe un elemento del body ");
+            console.log(element);
             element.messaging.forEach( function(event) {
                 //si el evento contiene un mensaje,
                 //procesamos el mensaje
@@ -39,7 +41,7 @@ function processEvent(event) {
     var message = event.message;
 
     if (message.text) {
-        respondToMessage(senderID, message.text);
+        handleMessage(senderID, message.text);
     } else {
         console.log("el evento message no tiene text");
     }
@@ -47,7 +49,12 @@ function processEvent(event) {
 };
 
 
-async function respondToMessage(senderID, message){
+async function handleMessage(senderID, message){
+    console.log("El mensaje capturado de messenger es: " + message + " -- by: " + senderID);
+
+    var prospect = await getUserInfo(senderID);
+    console.log(prospect);
+
     var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
     console.log("DialogFlow Response: " + dialogFlowResponse.toString() + " ... from: " + senderID);
 
@@ -61,8 +68,6 @@ async function respondToMessage(senderID, message){
         }; 
 
         await send(body);
-        var prospect = await getUserInfo(senderID);
-        console.log(prospect);
 };
 
 
