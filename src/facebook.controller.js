@@ -97,7 +97,7 @@ async function buildResponse(senderID, message, prospect) {
 
     var existentProspect = await Prospect.findByPersonId(prospect.id);
     if (!existentProspect) {
-        existentProspect = prospectService.createNewProspect(prospect);
+        existentProspect = await prospectService.createNewProspect(prospect);
     }
 
  

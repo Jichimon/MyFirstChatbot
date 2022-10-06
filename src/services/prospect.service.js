@@ -48,15 +48,14 @@ exports.saveProspect = async (prospect) => {
 
 
 exports.createNewProspect = async (prospect) => {
+    if (!prospect) return null;
+
     var nuevo = new Prospect({
         personId:   prospect.id,
         firstName:  prospect.first_name,
         lastName:   prospect.last_name,
         profilePhoto: prospect.profile_pic
     }); 
-
-    var response = null;
-    await nuevo.save().then((o) => { response = o });
-    return response;
+    return await Prospect.add(nuevo);
 }
 
