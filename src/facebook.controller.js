@@ -74,7 +74,7 @@ function processEvent(event) {
 async function handleMessage(senderID, message){
     console.log("El mensaje capturado de messenger es: " + message + " -- by: " + senderID);
 
-    if (senderID = '111032641731115') { console.log("message from app"); return; }
+    if (senderID == '111032641731115') { console.log("message from app"); return; }
 
     console.log("user's message processed");
     request(
