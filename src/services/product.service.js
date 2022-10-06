@@ -3,9 +3,9 @@ const Outlet = require('./../models/outlet.model');
 const Product = require('./../models/product.model');
 const Prospect = require('./../models/prospect.model');
 
-exports.getProductInfo = async (productName, prospectName) => {
+exports.getProductInfo = async (productName, prospect) => {
 
-    if (!productName || !prospectName) {
+    if (!productName || !prospect) {
         return "No se han enviado todos los datos requeridos";
     }
 
@@ -14,7 +14,7 @@ exports.getProductInfo = async (productName, prospectName) => {
         return "El producto no está disponible en el catálogo";
     }
 
-    var prospect = await Prospect.findByName(prospectName);
+    var prospect = await Prospect.findByPersonId(prospect.id);
     if (!prospect) {
         return "El prospecto no existe";
     }

@@ -4,29 +4,21 @@ var Schema = mongoose.Schema;
 const Assessment = require('./assessment.model');
 const Inquire = require('./inquire.model');
 
-
-
-
-const validateEmail = function(email) {
-    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/;
-    return re.test(email);
-};
-
 const prospectModel = new Schema({
-    name: {
+    personId: {
+        type: String,
+        unique: true,
+        required: [true, 'personId is mandatory']
+    },
+    firstName: {
         type: String,
         required: [true, 'name is mandatory']
     },
-    email: {
+    lastName: {
         type: String,
-        trim: true,
-        required: [true, 'El email es obligatorio'],
-        lowercase: true,
-        unique: true,
-        validate: [validateEmail, 'Por favor, ingrese un email Válido'],
-        match: [/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/]
+        required: [true, 'name is mandatory']
     },
-    phone: {
+    profilePhoto: {
         type: String
     }
 });
@@ -83,23 +75,18 @@ prospectModel.methods.makeInquire = async (product) => {
 
 
 prospectModel.methods.toString = () => {
-    return 'name: ' + this.name + ' | email: ' + this.email + ' | phone: ' + this.phone;
+    return 'name: ' + this.firstName + " " + this.lastName ;
 }
 
 
-prospectModel.statics.add = function (aProspect, callback) {
-    this.create(aProspect, callback);
+prospectModel.statics.add = async function (aProspect) {
+    return this.create(aProspect).exec();
 }
 
-prospectModel.statics.findByName = async function (aName) {
-    return this.findOne({ name: aName }).exec();
-}
 
-prospectModel.statics.findByEmail = async function (anEmail) {
-    return this.findOne({ email: anEmail }).exec();
+prospectModel.statics.findByPersonId = async function (anId) {
+    return this.findOne({ personId: anId }).exec();
 }
-
-prospectModel.statics.ValidateEmail = validateEmail;
 
 
 module.exports = mongoose.model('Prospect', prospectModel);
