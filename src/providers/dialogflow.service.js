@@ -1,6 +1,7 @@
 const dialogflowSE = require('@google-cloud/dialogflow');
 const dialogflowCX = require('@google-cloud/dialogflow-cx'); 
 const serviceAccount = require('../../service-account.json');
+const { getAllProducts, getProductsInCurrentPromotion, getProductInfo } = require('../services/product.service');
 
 const PROJECT_ID = serviceAccount.project_id;
 const LOCATION = 'us-central1-dialogflow.googleapis.com';
@@ -35,7 +36,7 @@ async function dialogFlowCX(senderID, message, prospect) {
 
     const responses = await sessionClient.detectIntent(request); 
     const result = responses[0].queryResult;
-    return result;
+    return getIntentResult(result, prospect);
     var responseMessages = result.responseMessages;
     return loadTextMessages(responseMessages);
 }
@@ -58,6 +59,27 @@ async function dialogFlowSE(senderID, message) {
     console.log(result);
     var textResponse = result.fulfillmentText;
     return textResponse;
+}
+
+function getIntentResult(result, prospect){
+    var intent = result.intent.displayName;
+    switch(intent) {
+        case "productos_intent":
+            return getAllProducts();
+            break;
+        case "promocion_intent":
+            return getProductsInCurrentPromotion();
+            break;
+        case "product_info_intent":
+            var productName = result.parameters.fields.product_mochila_ent.stringValue;
+            console.log(productName);
+            return getProductInfo(productName, prospect);
+            break;
+        default:
+            var responseMessages = result.responseMessages;
+            return loadTextMessages(responseMessages);
+      }
+
 }
 
 function loadTextMessages(responseMessages) {
