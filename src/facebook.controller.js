@@ -95,6 +95,8 @@ async function handleMessage(senderID, message){
 async function buildResponse(senderID, message, prospect) {
     console.log(prospect);
 
+    console.log("id: " + prospect.id);
+
     var existentProspect = await Prospect.findByPersonId(prospect.id);
     if (!existentProspect) {
         existentProspect = await prospectService.createNewProspect(prospect);
