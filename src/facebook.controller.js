@@ -19,8 +19,8 @@ exports.captureEvent = async function (req, res, next) {
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
         req.body.entry.forEach( function (element) {
-            console.log("Se recibe un elemento del body ");
-            console.log(element);
+            //console.log("Se recibe un elemento del body ");
+            //console.log(element);
             element.messaging.forEach( function(event) {
                 //si el evento contiene un mensaje,
                 //procesamos el mensaje
