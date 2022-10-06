@@ -47,7 +47,7 @@ exports.saveProspect = async (prospect) => {
 }
 
 
-createNewProspect = async (prospect) => {
+exports.createNewProspect = async (prospect) => {
     var nuevo = new Prospect({
         personId:   prospect.id,
         firstName:  prospect.first_name,

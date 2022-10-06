@@ -8,12 +8,12 @@ const AGENT_ID = '886dc785-a787-4fe8-b605-6337928487b9';
 const LANGUAGE_CODE = 'es';
 
 
-async function SendToBot(senderID, message) {
-    return dialogFlowCX(senderID, message);
+async function SendToBot(senderID, message, prospect) {
+    return dialogFlowCX(senderID, message, prospect);
 };
 
 
-async function dialogFlowCX(senderID, message) {
+async function dialogFlowCX(senderID, message, prospect) {
     const sessionId = senderID;
     const sessionClient = new dialogflowCX.SessionsClient({ credentials: serviceAccount, apiEndpoint: LOCATION});
     const sessionPath = sessionClient.projectLocationAgentSessionPath(
@@ -35,6 +35,7 @@ async function dialogFlowCX(senderID, message) {
 
     const responses = await sessionClient.detectIntent(request); 
     const result = responses[0].queryResult;
+    return result;
     var responseMessages = result.responseMessages;
     return loadTextMessages(responseMessages);
 }
