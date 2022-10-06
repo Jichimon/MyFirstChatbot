@@ -80,12 +80,12 @@ prospectModel.methods.toString = () => {
 
 
 prospectModel.statics.add = async function (aProspect) {
-    return this.create(aProspect).exec();
+    return await aProspect.save();
 }
 
 
 prospectModel.statics.findByPersonId = async function (anId) {
-    return this.findOne({ personId: anId }).exec();
+    return await this.findOne({ personId: anId }).exec();
 }
 
 
