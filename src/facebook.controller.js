@@ -39,7 +39,7 @@ function processEvent(event) {
     var message = event.message;
 
     if (message.text) {
-        return respondToMessage(senderID, message.text);
+        respondToMessage(senderID, message.text);
     } else {
         console.log("el evento message no tiene text");
     }
@@ -61,13 +61,14 @@ async function respondToMessage(senderID, message){
         }; 
 
         await send(body);
-
+        var prospect = await getUserInfo(senderID);
+        console.log(prospect);
 };
 
 
-function send(request_body){
-
-    request(
+async function send(request_body){
+    var response;
+    await request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
             "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
@@ -78,6 +79,27 @@ function send(request_body){
             console.error('error:', err); 
             console.log('statusCode:', res && res.statusCode); 
             console.log('body:', body);
-            return body; 
-        })
+            response = body;
+        }
+    );
+    return response;
 };
+
+
+async function getUserInfo(personID) {
+    var response;
+    await request(
+        {
+            "uri": "https://graph.facebook.com/v15.0/" + personID + "/",
+            "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
+            "method": "GET",
+        },
+        (err, res, body) => {
+            console.error('error:', err); 
+            console.log('statusCode:', res && res.statusCode); 
+            console.log('body:', body);
+            response = body;
+        }
+    );
+    return response;
+}
