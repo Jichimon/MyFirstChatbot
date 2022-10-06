@@ -74,6 +74,8 @@ function processEvent(event) {
 async function handleMessage(senderID, message){
     console.log("El mensaje capturado de messenger es: " + message + " -- by: " + senderID);
 
+    if (senderID = '111032641731115') return;
+
     request(
         {
             "uri": "https://graph.facebook.com/v15.0/" + senderID + "/",
