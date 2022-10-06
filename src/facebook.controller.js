@@ -74,16 +74,34 @@ function processEvent(event) {
 async function handleMessage(senderID, message){
     console.log("El mensaje capturado de messenger es: " + message + " -- by: " + senderID);
 
-    var prospect = await getUserInfo(senderID);
+    request(
+        {
+            "uri": "https://graph.facebook.com/v15.0/" + senderID + "/",
+            "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
+            "method": "GET",
+        },
+        (err, res, body) => {
+            console.error('error:', err); 
+            console.log('statusCode:', res && res.statusCode); 
+            console.log('body:', body);
+            var prospect = body;
+            buildResponse(senderID, message, prospect);
+        }
+    );
+
+};
+
+
+async function buildResponse(senderID, message, prospect) {
     console.log(prospect);
 
     var existentProspect = await Prospect.findByPersonId(prospect.id);
     if (!existentProspect) {
         existentProspect = prospectService.createNewProspect(prospect);
     }
-    
+
  
-    var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
+    var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message, prospect);
     console.log("DialogFlow Response: " + dialogFlowResponse.toString() + " ... from: " + senderID);
 
         let body = {
@@ -96,8 +114,7 @@ async function handleMessage(senderID, message){
         }; 
 
         await send(body);
-};
-
+}
 
 async function send(request_body){
     await request(
@@ -116,19 +133,3 @@ async function send(request_body){
     );
 };
 
-
-function getUserInfo(personID) {
-    request(
-        {
-            "uri": "https://graph.facebook.com/v15.0/" + personID + "/",
-            "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
-            "method": "GET",
-        },
-        (err, res, body) => {
-            console.error('error:', err); 
-            console.log('statusCode:', res && res.statusCode); 
-            console.log('body:', body);
-            return body;
-        }
-    );
-}
