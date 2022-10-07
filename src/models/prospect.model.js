@@ -50,9 +50,11 @@ prospectModel.methods.makeAssessment= async (product, points, comment) => {
 }
 
 
-prospectModel.methods.makeInquire = async (product) => {
+prospectModel.methods.makeInquire = async (personId, product) => {
     
-    var inquireAlreadyMade = await Inquire.findByProspectAndProduct(this, product);
+
+    var prospect = await this.findByPersonId(personId);
+    var inquireAlreadyMade = await Inquire.findByProspectAndProduct(prospect, product);
     
     if (inquireAlreadyMade) {
         inquireAlreadyMade.count = inquireAlreadyMade.count + 1;
@@ -65,7 +67,7 @@ prospectModel.methods.makeInquire = async (product) => {
     var inquire = new Inquire({
         count: 1,
         product: product,
-        prospect: this,
+        prospect: prospect,
         lastTime: Date.now()
     });
 

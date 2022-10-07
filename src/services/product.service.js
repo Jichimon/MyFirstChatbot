@@ -18,7 +18,7 @@ exports.getProductInfo = async (productName, prospect) => {
     if (!dbProspect) {
         return "El prospecto no existe";
     }
-    await dbProspect.makeInquire(product);
+    await dbProspect.makeInquire(dbProspect.personId, product);
     
     return product.toString();
 }
