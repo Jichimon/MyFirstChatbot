@@ -53,7 +53,7 @@ prospectModel.methods.makeAssessment= async (product, points, comment) => {
 prospectModel.methods.makeInquire = async (personId, product) => {
     
 
-    var prospect = await this.findByPersonId(personId);
+    var prospect = await prospectModel.statics.findByPersonId(personId);
     var inquireAlreadyMade = await Inquire.findByProspectAndProduct(prospect, product);
     
     if (inquireAlreadyMade) {
