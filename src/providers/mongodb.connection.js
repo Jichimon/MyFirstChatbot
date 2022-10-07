@@ -1,8 +1,6 @@
 
 const mongoose = require('mongoose');
-//const uri = process.env.MONGO_DB_STRING_CONNECTION;
-
-const uri = "mongodb+srv://topicos:G1nn0@topicos-my-first-chatbo.fzsac0o.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MONGO_DB_STRING_CONNECTION;
 
 mongoose.connect(
     uri, 
