@@ -27,7 +27,7 @@ exports.TestGetProductsInPromotion = async function (req, res, next) {
 
 exports.TestGetProductInfo = async function (req, res, next) {
     const product = req.body.productName;
-    const prospect = req.body.prospectName;
+    const prospect = req.body.prospect;
     var response;
     try {
         response = await productService.getProductInfo(product, prospect);

@@ -10,6 +10,8 @@ exports.getProductInfo = async (productName, prospect) => {
     }
 
     var product = await Product.findByName(productName);
+    console.log('el producto es: ');
+    console.log(product);
     if (!product) {
         return "El producto no está disponible en el catálogo";
     }
@@ -18,9 +20,9 @@ exports.getProductInfo = async (productName, prospect) => {
     if (!dbProspect) {
         return "El prospecto no existe";
     }
-    await dbProspect.makeInquire(dbProspect.personId, product);
+    await dbProspect.makeInquire(dbProspect, product);
     
-    return product.toString();
+    return Product.toString(product);
 }
 
 
