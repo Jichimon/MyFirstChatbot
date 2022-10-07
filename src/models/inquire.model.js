@@ -34,7 +34,7 @@ inquireModel.statics.add = function (aInquire, callback) {
 }
 
 inquireModel.statics.findByProspectAndProduct = async function (aProspect, aProduct) {
-    return await this.findOne({ prospect: aProspect, product: aProduct }).exec();
+    return await this.findOne({ prospect: aProspect._id, product: aProduct._id }).exec();
 }
 
 inquireModel.statics.findByProspect = async function (aProspect) {
