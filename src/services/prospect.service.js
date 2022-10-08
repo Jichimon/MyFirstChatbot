@@ -26,7 +26,7 @@ exports.saveCommentAboutProduct = async (productName, prospect, comment, points)
         console.log("Prospect created.");
     }
 
-    var assessment = await existentProspect.makeAssessment(product, points, comment);
+    var assessment = await existentProspect.makeAssessment(existentProspect, product, points, comment);
     console.log("Assessment Made: " + assessment.toString());
 
     return "Gracias " + prospectFirstName + "! tu comentario se ha guardado! Eso no ayudará mucho a brindarte un mejor servicio.";

@@ -25,12 +25,12 @@ const prospectModel = new Schema({
 
 
 
-prospectModel.methods.makeAssessment= async (product, points, comment) => {
+prospectModel.methods.makeAssessment= async (prospect, product, points, comment) => {
     var assessment = new Assessment({
         points: points,
         comment: comment || "",
         product: product,
-        prospect: this,
+        prospect: prospect,
         lastTime: Date.now()
     });
 
