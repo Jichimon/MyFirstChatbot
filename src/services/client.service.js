@@ -24,5 +24,5 @@ exports.saveClient = async (prospect, clientInfo) => {
 
     if (!res)  return "No se pudo agregar como cliente.";
 
-    return "Se agregó a " + existentProspect.firstName + " como un nuevo cliente a la base de datos";
+    return "Muchas gracias " + existentProspect.firstName + ", hemos registrado sus datos.";
 }
