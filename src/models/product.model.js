@@ -41,13 +41,13 @@ const productModel = new Schema({
 });
 
 
-productModel.methods.toString = () => {
-    return 'name: ' + this.name + 
-    ' | description: ' + this.description + 
-    ' | price: ' + this.price + 
-    ' | size: ' + this.size + 
-    ' | weight: ' + this.weight + 
-    ' | capacity: ' + this.capacity;
+productModel.statics.toString = (p) => {
+    return 'A la ' + p.name + 
+    ', la describimos como ' + p.description + 
+    ', cuesta ' + p.price + 
+    ' $us. con un tamaño de ' + p.size + 
+    ' plg, pesando ' + p.weight + 
+    ' kgs. y con una capacidad de ' + p.capacity + ' lts.';
 }
 
 productModel.statics.add = function (aProduct, callback) {

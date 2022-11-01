@@ -25,7 +25,7 @@ const inquireModel = new Schema({
 
 inquireModel.methods.toString = () => {
     return 'product: ' + this.product.name + 
-    ' | prospect: ' + this.prospect.name + 
+    ' | prospect: ' + this.prospect.firstName + 
     ' | count: ' + this.count;
 }
 
@@ -34,7 +34,7 @@ inquireModel.statics.add = function (aInquire, callback) {
 }
 
 inquireModel.statics.findByProspectAndProduct = async function (aProspect, aProduct) {
-    return await this.findOne({ prospect: aProspect, product: aProduct }).exec();
+    return await this.findOne({ prospect: aProspect._id, product: aProduct._id }).exec();
 }
 
 inquireModel.statics.findByProspect = async function (aProspect) {

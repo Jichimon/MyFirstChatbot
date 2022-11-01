@@ -28,7 +28,7 @@ const assessmentModel = new Schema({
 
 assessmentModel.methods.toString = () => {
     return 'product: ' + this.product.name + 
-    ' | prospect: ' + this.prospect.name + 
+    ' | prospect: ' + this.prospect.firstName + 
     ' | points: ' + this.points + 
     ' | count: ' + this.count;
 }

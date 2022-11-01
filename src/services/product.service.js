@@ -3,24 +3,26 @@ const Outlet = require('./../models/outlet.model');
 const Product = require('./../models/product.model');
 const Prospect = require('./../models/prospect.model');
 
-exports.getProductInfo = async (productName, prospectName) => {
+exports.getProductInfo = async (productName, prospect) => {
 
-    if (!productName || !prospectName) {
+    if (!productName || !prospect) {
         return "No se han enviado todos los datos requeridos";
     }
 
     var product = await Product.findByName(productName);
+    console.log('el producto es: ');
+    console.log(product);
     if (!product) {
         return "El producto no está disponible en el catálogo";
     }
 
-    var prospect = await Prospect.findByName(prospectName);
-    if (!prospect) {
+    var dbProspect = await Prospect.findByPersonId(prospect.id);
+    if (!dbProspect) {
         return "El prospecto no existe";
     }
-    await prospect.makeInquire(product);
+    await dbProspect.makeInquire(dbProspect, product);
     
-    return product.toString();
+    return Product.toString(product);
 }
 
 

@@ -1,5 +1,7 @@
 const request = require("request");
 const dialogFlow = require('./providers/dialogflow.service');
+const prospectService = require('./services/prospect.service');
+const Prospect = require('./models/prospect.model');
 
 exports.verifyWebhookConnection = async function (req, res, next) {
     // verificar el token
@@ -19,10 +21,12 @@ exports.captureEvent = async function (req, res, next) {
     if (req.body.object == "page") {
         //revisamos cada una de las entradas
         req.body.entry.forEach( function (element) {
+            console.log("Se recibe un elemento del body ");
+            console.log(element);
             element.messaging.forEach( function(event) {
                 //si el evento contiene un mensaje,
                 //procesamos el mensaje
-                if (event.message) {
+                if (event.message != undefined) {
                     messageSended = processEvent(event);
                 }
             });
@@ -34,12 +38,32 @@ exports.captureEvent = async function (req, res, next) {
 };
 
 
+exports.captureEvent2 = async function (req, res, next) {
+    var messageSended;
+    //Verificamos si el evento es de una página
+    if (req.body.object == "page") {
+        //revisamos cada una de las entradas
+        var entry = req.body.entry;
+        var element = entry.element;
+        var event = element.messaging.event;
+        //si el evento contiene un mensaje,
+        //procesamos el mensaje
+        if (event.message) {
+            messageSended = processEvent(event);
+        }
+        res.send('evento ejecutado!');
+    }
+
+    res.status(400);
+}
+
+
 function processEvent(event) {
     var senderID = event.sender.id;
     var message = event.message;
 
     if (message.text) {
-        return respondToMessage(senderID, message.text);
+        handleMessage(senderID, message.text);
     } else {
         console.log("el evento message no tiene text");
     }
@@ -47,9 +71,43 @@ function processEvent(event) {
 };
 
 
-async function respondToMessage(senderID, message){
-    var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message);
-    console.log("DialogFlow Response: " + dialogFlowResponse.toString());
+async function handleMessage(senderID, message){
+    console.log("El mensaje capturado de messenger es: " + message + " -- by: " + senderID);
+
+    if (senderID == '111032641731115') { console.log("message from app"); return; }
+
+    console.log("user's message processed");
+    request(
+        {
+            "uri": "https://graph.facebook.com/v15.0/" + senderID + "/",
+            "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
+            "method": "GET",
+        },
+        (err, res, body) => {
+            console.error('error:', err); 
+            console.log('statusCode:', res && res.statusCode); 
+            console.log('body:', body);
+            var prospect = JSON.parse(body);
+            buildResponse(senderID, message, prospect);
+        }
+    );
+
+};
+
+
+async function buildResponse(senderID, message, prospect) {
+    console.log(prospect);
+
+    console.log("id: " + prospect.id);
+
+    var existentProspect = await Prospect.findByPersonId(prospect.id);
+    if (!existentProspect) {
+        existentProspect = await prospectService.createNewProspect(prospect);
+    }
+
+ 
+    var dialogFlowResponse = await dialogFlow.SendToBot(senderID, message, prospect);
+    console.log("DialogFlow Response: " + dialogFlowResponse.toString() + " ... from: " + senderID);
 
         let body = {
             "recipient": {
@@ -61,14 +119,10 @@ async function respondToMessage(senderID, message){
         }; 
 
         await send(body);
+}
 
-};
-
-
-function send(request_body){
-
-    console.log("Request body: " + request_body);
-    request(
+async function send(request_body){
+    await request(
         {
             "uri": "https://graph.facebook.com/v2.6/me/messages",
             "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
@@ -79,6 +133,8 @@ function send(request_body){
             console.error('error:', err); 
             console.log('statusCode:', res && res.statusCode); 
             console.log('body:', body);
-            return body; 
-        })
+            response = body;
+        }
+    );
 };
+
