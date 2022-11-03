@@ -18,6 +18,18 @@ const promotionModel = new Schema({
     endDate: {
         type: Date,
         required: [true, 'end date is mandatory']
+    },
+    client: {
+        type: Boolean,
+    },
+    contacted: {
+        type: Boolean,
+    },
+    public: {
+        type: Boolean,
+    },
+    frecuentClient: {
+        type: Boolean,
     }
 });
 

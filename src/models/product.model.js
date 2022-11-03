@@ -12,16 +12,19 @@ const productModel = new Schema({
         type: String,
         required: [true, 'name is mandatory']
     },
-    price: {
+    basePrice: {
         type: Number,
-        required: [true, 'price is mandatory']
+        required: [true, 'basePrice is mandatory']
     },
     description: {
         type: String,
     },
-    productType: {
-        type: Number,
-        required: [true, 'product-type is mandatory']
+    model: {
+        type: String,
+        required: [true, 'model is mandatory']
+    },
+    color: {
+        type: String,
     },
     size: {
         type: Number,
@@ -44,7 +47,7 @@ const productModel = new Schema({
 productModel.statics.toString = (p) => {
     return 'A la ' + p.name + 
     ', la describimos como ' + p.description + 
-    ', cuesta ' + p.price + 
+    ', cuesta ' + p.basePrice + 
     ' $us. con un tamaño de ' + p.size + 
     ' plg, pesando ' + p.weight + 
     ' kgs. y con una capacidad de ' + p.capacity + ' lts.';

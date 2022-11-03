@@ -15,20 +15,23 @@ const assessmentModel = new Schema({
         ref: 'Product',
         required: [true, 'product date is mandatory']         
     },
-    prospect: {
+    targetUser: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Prospect',
-        required: [true, 'prospect date is mandatory']         
+        ref: 'TargetUser',
+        required: [true, 'targetUser date is mandatory']         
     },
-    lastTime: {
-        type: Date
+    message: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message',
+        required: [true, 'message date is mandatory']         
     }
 });
 
 
 assessmentModel.methods.toString = () => {
     return 'product: ' + this.product.name + 
-    ' | prospect: ' + this.prospect.firstName + 
+    ' | targetUser: ' + this.targetUser.name + 
+    ' | message: ' + this.message.content + 
     ' | points: ' + this.points + 
     ' | count: ' + this.count;
 }
@@ -37,12 +40,12 @@ assessmentModel.statics.add = function (anAssessment, callback) {
     this.create(anAssessment, callback);
 }
 
-assessmentModel.statics.findByProspectAndProduct = async function (aProspect, aProduct) {
-    return await this.findOne({ prospect: aProspect, product: aProduct }).exec();
+assessmentModel.statics.findByTargetUserAndProduct = async function (aTargetUser, aProduct) {
+    return await this.findOne({ TargetUser: aTargetUser, product: aProduct }).exec();
 }
 
-assessmentModel.statics.findByProspect = async function (aProspect) {
-    return await this.find({ prospect: aProspect }).exec();
+assessmentModel.statics.findByTargetUser = async function (aTargetUser) {
+    return await this.find({ TargetUser: aTargetUser }).exec();
 }
 
 assessmentModel.statics.findByProduct = async function (aProduct) {

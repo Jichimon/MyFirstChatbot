@@ -1,5 +1,4 @@
-const Client = require('./../models/client.model');
-const Prospect = require('./../models/prospect.model');
+const TargerUser = require('../models/targetUser.model');
 const Product = require('./../models/product.model');
 
 exports.saveClient = async (prospect, clientInfo) => {
@@ -9,18 +8,18 @@ exports.saveClient = async (prospect, clientInfo) => {
     }
 
     var email = clientInfo.email;
-    if (!Client.validateEmail(email)) {
+    if (!TargerUser.validateEmail(email)) {
         return "El email no cumple con el formato";   
     }
 
-    var existentProspect = await Prospect.findByPersonId(prospectPersonId);
+    var existentProspect = await TargerUser.findByPersonId(prospectPersonId);
     
-    var client = new Client({
+    var client = new TargerUser({
         email: clientInfo.email,
         prospect: existentProspect
     });
 
-    var res = await Client.add(client);
+    var res = await TargerUser.add(client);
 
     if (!res)  return "No se pudo agregar como cliente.";
 

@@ -1,4 +1,4 @@
-const Prospect = require('./../models/prospect.model');
+const Prospect = require('./../models/targetUser.model');
 
 const model = "Prospect";
 const data = [

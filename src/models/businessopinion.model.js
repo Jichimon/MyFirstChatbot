@@ -10,26 +10,31 @@ const businessOpinionModel = new Schema({
     comment: {
         type: String,
     },
-    prospect: {
+    targetUser: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Prospect',
-        required: [true, 'prospect date is mandatory']         
+        ref: 'TargetUser',
+        required: [true, 'Target user is mandatory']         
+    },
+    message: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message',        
     }
 });
 
 
 businessOpinionModel.methods.toString = () => {
     return 'points: ' + this.points + 
-    ' | prospect: ' + this.prospect.name + 
-    ' | comment: ' + this.comment;
+    ' | user: ' + this.targetUser.name + 
+    ' | comment: ' + this.comment +
+    ' | message: ' + this.message.content;
 }
 
 businessOpinionModel.statics.add = function (anOpinion, callback) {
     this.create(anOpinion, callback);
 }
 
-businessOpinionModel.statics.findByProspect = function (aProspect, callback) {
-    this.find({ prospect: aProspect }, callback);
+businessOpinionModel.statics.findByTargetUser = function (aTargetUser, callback) {
+    this.find({ targetUser: aTargetUser }, callback);
 }
 
 module.exports = mongoose.model('BusinessOpinion', businessOpinionModel);

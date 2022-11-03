@@ -1,7 +1,7 @@
 const request = require("request");
 const dialogFlow = require('./providers/dialogflow.service');
 const prospectService = require('./services/prospect.service');
-const Prospect = require('./models/prospect.model');
+const Prospect = require('./models/targetUser.model');
 
 exports.verifyWebhookConnection = async function (req, res, next) {
     // verificar el token

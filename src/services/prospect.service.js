@@ -1,7 +1,7 @@
-const Prospect = require('./../models/prospect.model');
+const Prospect = require('./../models/targetUser.model');
 const Product = require('./../models/product.model');
 const Assessment = require('./../models/assessment.model');
-const Client = require('./../models/client.model');
+const Client = require('./../models/targetUser.model');
 
 exports.saveCommentAboutProduct = async (productName, prospect, comment, points) => {
     

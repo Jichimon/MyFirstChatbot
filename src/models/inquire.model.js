@@ -3,42 +3,40 @@ var Schema = mongoose.Schema;
 
 
 const inquireModel = new Schema({
-    count: {
-        type: Number,
-        required: [true, 'count is mandatory']
+    message: {
+        type: mongoose.Schema.Types.ObjectId  ,
+        ref: 'Message',
+        required: [true, 'message is mandatory']         
     },
     product: {
         type: mongoose.Schema.Types.ObjectId  ,
         ref: 'Product',
         required: [true, 'product is mandatory']         
     },
-    prospect: {
+    targetUser: {
         type: mongoose.Schema.Types.ObjectId  ,
-        ref: 'Prospect',
-        required: [true, 'prospect is mandatory']         
-    },
-    lastTime: {
-        type: Date
+        ref: 'TargetUser',
+        required: [true, 'targetUser is mandatory']         
     }
 });
 
 
 inquireModel.methods.toString = () => {
     return 'product: ' + this.product.name + 
-    ' | prospect: ' + this.prospect.firstName + 
-    ' | count: ' + this.count;
+    ' | targetUser: ' + this.targetUser.name + 
+    ' | message: ' + this.messgea.content;
 }
 
 inquireModel.statics.add = function (aInquire, callback) {
     this.create(aInquire, callback);
 }
 
-inquireModel.statics.findByProspectAndProduct = async function (aProspect, aProduct) {
-    return await this.findOne({ prospect: aProspect._id, product: aProduct._id }).exec();
+inquireModel.statics.findByTargetUserAndProduct = async function (aTargetUser, aProduct) {
+    return await this.findOne({ targetUser: aTargetUser._id, product: aProduct._id }).exec();
 }
 
-inquireModel.statics.findByProspect = async function (aProspect) {
-    return await this.find({ prospect: aProspect }).exec();
+inquireModel.statics.findByTargetUser = async function (aTargetUser) {
+    return await this.find({ targetUser: aTargetUser }).exec();
 }
 
 inquireModel.statics.findByProduct = async function (aProduct) {

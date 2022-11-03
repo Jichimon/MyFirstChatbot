@@ -1,4 +1,4 @@
-const Outlet = require('./../models/outlet.model');
+const Outlet = require('./../models/productOutlet.model');
 const Product = require('./../models/product.model');
 const Promotion = require('./../models/promotion.model');
 

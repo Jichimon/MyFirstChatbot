@@ -2,10 +2,14 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 
-const outletModel = new Schema({
+const productOutletModel = new Schema({
     stock: {
         type: Number,
         required: [true, 'stock is mandatory']
+    },
+    name: {
+        type: String,
+        required: [true, 'name is mandatory']
     },
     product: {
         type: mongoose.Schema.Types.ObjectId  ,
@@ -17,25 +21,34 @@ const outletModel = new Schema({
         ref: 'Promotion',
         required: [true, 'promotion date is mandatory']         
     },
+    outletPrice: {
+        type: Number,
+        required: [true, 'outletPrice is mandatory']
+    },
+    description: {
+        type: String,
+    }
 });
 
 
-outletModel.methods.toString = () => {
+productOutletModel.methods.toString = () => {
     return 'product: ' + this.product.name + 
     ' | promotion: ' + this.promotion.name + 
-    ' | stock: ' + this.stock;
+    ' | stock: ' + this.stock + 
+    ' | outletPrice: ' + this.outletPrice + 
+    ' | description: ' + this.description;
 }
 
-outletModel.statics.add = function (aOutlet, callback) {
+productOutletModel.statics.add = function (aOutlet, callback) {
     this.create(aOutlet, callback);
 }
 
-outletModel.statics.findByPromotion = async function (aPromo) {
+productOutletModel.statics.findByPromotion = async function (aPromo) {
     return await this.find({ promotion: aPromo });
 }
 
-outletModel.statics.findByProduct = async function (aProduct) {
+productOutletModel.statics.findByProduct = async function (aProduct) {
     return await this.find({ product: aProduct });
 }
 
-module.exports = mongoose.model('Outlet', outletModel);
+module.exports = mongoose.model('Outlet', productOutletModel);

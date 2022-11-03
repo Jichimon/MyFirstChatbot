@@ -1,11 +1,11 @@
 const Promotion = require('./../models/promotion.model');
-const Outlet = require('./../models/outlet.model');
+const Outlet = require('./../models/productOutlet.model');
 const Product = require('./../models/product.model');
-const Prospect = require('./../models/prospect.model');
+const TargetUser = require('./../models/targetUser.model');
 
-exports.getProductInfo = async (productName, prospect) => {
+exports.getProductInfo = async (productName, targetUser) => {
 
-    if (!productName || !prospect) {
+    if (!productName || !targetUser) {
         return "No se han enviado todos los datos requeridos";
     }
 
@@ -16,7 +16,7 @@ exports.getProductInfo = async (productName, prospect) => {
         return "El producto no está disponible en el catálogo";
     }
 
-    var dbProspect = await Prospect.findByPersonId(prospect.id);
+    var dbProspect = await TargetUser.findByPersonId(targetUser.id);
     if (!dbProspect) {
         return "El prospecto no existe";
     }
